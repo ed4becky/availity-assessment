@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "CsvParserApplication",
+            "request": "launch",
+            "mainClass": "org.ed4becky.CsvParserApplication",
+            "projectName": "CsvParserApplication"
+        },
+        {
+            "type": "java",
+            "name": "LispValidatorApplication",
+            "request": "launch",
+            "mainClass": "org.ed4becky.LispValidatorApplication",
+            "projectName": "LispValidatorApplication"
+        }
+    ]
+}
