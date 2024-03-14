@@ -23,7 +23,7 @@ java -cp . org.ed4becky.LispValidatorApplication "<some string>"
 
 ```
 cd csv-parser
-mvn cleam compile
+mvn clean compile
 mvn spring-boot:run -Dspring-boot.run.arguments="test.csv"
 ```
 

@@ -9,9 +9,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -133,44 +135,21 @@ public class CsvParserApplication implements CommandLineRunner {
 	}
 
 	private List<User> dedupeAndSort(List<User> list) {
-		Collections.sort(list, new UserComparator());
-		List<User> removal = new ArrayList<>();
-		List<User> newList = new ArrayList<>();
-
-		User prev = list.get(0);
-		for (int i = 1; i < list.size(); i++) {
-			User curr = list.get(i);
-			if (prev.getId().equals(curr.getId())
-					&& prev.getInsuranceCompany().equals(curr.getInsuranceCompany())) {
-				if (prev.getVersion() < curr.getVersion()) {
-					removal.add(prev);
-					log.info("remove " + prev + " and save " + curr);
-					prev = curr;
-				} else {
-					removal.add(curr);
-					log.info("remove " + curr + " and save " + prev);
+		Map<Integer, User> users = new HashMap<>();
+		
+		for (int i = 0; i < list.size(); i++) {
+			User listUser = list.get(i);
+			User setUser = users.get(listUser.hashCode());
+			if(setUser != null ) {
+				if(listUser.getVersion() > setUser.getVersion()) {
+					users.put(listUser.hashCode(), listUser);
 				}
-			} else
-				prev = curr;
-		}
-		if (removal.size() > 0) {
-			for (int i = 0; i < list.size(); i++) {
-				User curr = list.get(i);
-				boolean isDupe = false;
-				for (int j = 0; j < removal.size(); j++) {
-					User r = removal.get(j);
-					if (curr.getId().equals(r.getId())
-							&& curr.getInsuranceCompany().equals(r.getInsuranceCompany())
-							&& curr.getVersion() == r.getVersion()) {
-						isDupe = true;
-						break;
-					}
-				}
-				if (!isDupe)
-					newList.add(curr);
+			} else {
+				users.put(listUser.hashCode(), listUser);
 			}
-		} else
-			newList = list;
+		}
+		List<User> newList = new ArrayList<>(users.values());
+		Collections.sort(newList, new UserComparator());
 
 		return newList;
 	}
